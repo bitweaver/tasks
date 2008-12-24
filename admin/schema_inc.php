@@ -188,9 +188,10 @@ $gBitInstaller->registerSchemaSequences( TASKS_PKG_NAME, $sequences );
 
 // ### Default User Permissions
 $gBitInstaller->registerUserPermissions( TASKS_PKG_NAME, array(
-	array('p_tasks_view', 'Can browse the TAsk List', 'basic', TASKS_PKG_NAME),
+	array('p_tasks_view', 'Can browse the Task List', 'basic', TASKS_PKG_NAME),
 	array('p_tasks_update', 'Can update the Task content', 'editors', TASKS_PKG_NAME),
 	array('p_tasks_create', 'Can create a new Task entry', 'registered', TASKS_PKG_NAME),
+	array('p_tasks_supervise', 'Can supervise Task List', 'admin', TASKS_PKG_NAME),
 	array('p_tasks_admin', 'Can admin Task List', 'admin', TASKS_PKG_NAME),
 	array('p_tasks_expunge', 'Can remove a Task entry', 'admin', TASKS_PKG_NAME)
 ) );

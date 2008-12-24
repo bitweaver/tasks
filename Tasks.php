@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.1 2008/11/28 11:55:37 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.2 2008/12/24 09:04:37 lsces Exp $
  *
  * Copyright ( c ) 2006 bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -12,12 +12,12 @@
 /**
  * required setup
  */
-require_once( LIBERTY_PKG_PATH.'LibertyContent.php' );		// Citizen base class
+require_once( LIBERTY_PKG_PATH.'LibertyContent.php' );		// Tasks base class
 
 define( 'TASKS_CONTENT_TYPE_GUID', 'task_ticket' );
 
 /**
- * @package citizen
+ * @package tasks
  */
 class Tasks extends LibertyContent {
 	var $mTicketId;
