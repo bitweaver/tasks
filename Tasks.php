@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.2 2008/12/24 09:04:37 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.3 2009/01/12 20:07:25 lsces Exp $
  *
  * Copyright ( c ) 2006 bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -222,7 +222,7 @@ class Tasks extends LibertyContent {
 			$pContentId = $this->mContentId;
 		}
 
-		return CITIZEN_PKG_URL.'index.php?content_id='.$pContentId;
+		return TASKS_PKG_URL.'index.php?content_id='.$pContentId;
 	}
 
 	/**
@@ -269,12 +269,10 @@ class Tasks extends LibertyContent {
 	}
 
 	/**
-	 * Returns list of contract entries
+	 * Returns list of tesk entries
 	 *
 	 * @param integer 
-	 * @param integer 
-	 * @param integer 
-	 * @return string Text for the title description
+	 * @return array Enquiry tickets
 	 */
 	function getList( &$pListHash ) {
 		LibertyContent::prepGetList( $pListHash );
@@ -322,6 +320,31 @@ class Tasks extends LibertyContent {
 
 		$pListHash['cant'] = $cant;
 		LibertyContent::postGetList( $pListHash );
+		return $ret;
+	}
+	
+	/**
+	 * Returns list of activity queues
+	 *
+	 * @param integer 
+	 * @return array Queue records
+	 */
+	function getQueueList( &$pListHash ) {
+		$query = "SELECT rs.`office`, rs.`terminal`, rs.`title`, rs.`ter_type`, rs.`x1` AS no_warn, rs.`x2` AS no_alarm, rs.`x3` AS aw_warn, rs.`x4` AS aw_alarm,
+			COUNT(tic.`ticket_ref`) AS `no_waiting`,
+			AVG(((CURRENT_TIMESTAMP - tic.`last`) * 86400)) AS `avg_wait`
+			FROM `".BIT_DB_PREFIX."task_roomstat` rs
+			LEFT JOIN `".BIT_DB_PREFIX."task_ticket` tic ON tic.`office` = rs.`office` AND tic.`room` = rs.`terminal` AND tic.`ticket_ref` BETWEEN CURRENT_DATE AND CURRENT_DATE + 1
+			WHERE rs.`ter_type` > 6 AND rs.`terminal` > 80
+			GROUP BY rs.`office`, rs.`terminal`, rs.`title`, rs.`ter_type`, rs.`x1`, rs.`x2`, rs.`x3`, rs.`x4`
+			ORDER BY rs.`terminal`";
+
+		$result = $this->mDb->query( $query, $bindVars );
+		while ($res = $result->fetchRow()) {
+			$res['queue_id'] = $res['terminal'] - 80;
+			$res['display_url'] = TASKS_PKG_URL.'view_queue.php?queue_id='.$res['queue_id'];
+			$ret[] = $res;
+		}
 		return $ret;
 	}
 

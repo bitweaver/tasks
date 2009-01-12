@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tasks/templates/view.tpl,v 1.1 2008/12/24 09:04:37 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tasks/templates/view.tpl,v 1.2 2009/01/12 20:07:25 lsces Exp $ *}
 {strip}
 <div class="display tasks">
 	<div class="header">
@@ -8,35 +8,38 @@
 	<div class="body">
 		{formfeedback hash=$feedback}
 
-		{if $currentInfo.tickets}
+		{if $currentInfo.queues}
 		<div class="row">
-			{formlabel label="Tickets" for="ticket"}
-			{forminput}
 			<table>
-				<caption>{tr}List of Current Days enquiries{/tr}</caption>
+				<caption>{tr}List of Current Days outstanding enquiries{/tr}</caption>
 				<thead>
 					<tr>
-						<th>Data</th>
-						<th>TAG</th>
-						<th>Note</th>
+						<th>Queue</th>
+						<th>Title</th>
+						<th>Number Waiting</th>
+						<th>Average Wait</th>
+						<th>Call</th>
 					</tr>
 				</thead>
 				<tbody>
-					{section name=ticket loop=$currentInfo.tickets}
-						<tr class="{cycle values="even,odd"}" title="{$currentInfo.ticket[ticket].title|escape}">
+					{section name=queue loop=$currentInfo.queues}
+						<tr class="{cycle values="even,odd"}" title="{$currentInfo.queues[queue].title|escape}">
 							<td>
-								{$currentInfo.tickets[ticket].ticket_ref|bit_long_date} - {$currentInfo.tickets[ticket].ticket_no}
+								{$currentInfo.queues[queue].queue_id}
 							</td>
 							<td>
-								{$currentInfo.tickets[ticket].tags|escape}
+								<a href="{$currentInfo.queues[queue].display_url}">{$currentInfo.queues[queue].title|escape}</a>
+							</td>
+							<td>
+								{$currentInfo.queues[queue].no_waiting}
+							</td>
+							<td>
+								{$currentInfo.queues[queue].avg_wait}
 							</td>
 							<td>
 								<span class="actionicon">
-									{smartlink ititle="View" ifile="view_ticket.php" ibiticon="icons/accessories-text-editor" ticket_id=$currentInfo.tickets[ticket].ticket_id}
+									{smartlink ititle="View" ifile="get_queue.php" ibiticon="icons/go-up" queue_id=$currentInfo.queues[queue].queue_id}
 								</span>
-								<label for="ev_{$currentInfo.tickets[ticket].ticket_no}">	
-									{$currentInfo.tickets[ticket].staff_id}
-								</label>
 							</td>
 						</tr>
 					{sectionelse}
@@ -48,7 +51,6 @@
 					{/section}
 				</tbody>
 			</table>
-			{/forminput}
 		</div>
 
 		{/if}
