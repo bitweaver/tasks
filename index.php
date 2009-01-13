@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_tasks/index.php,v 1.5 2009/01/13 13:06:39 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_tasks/index.php,v 1.6 2009/01/13 13:16:44 lsces Exp $
  *
  * Copyright (c) 2006 bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -24,10 +24,16 @@ if ( $userstate ) {
 	$gTask->load();
 	if( !empty( $_REQUEST['finish'] ) ) {
 		$updatetask = array();
-		$updatetask['new_room'] = $_REQUEST['new_room'];
+		$updatetask['new_room'] = -1;
 	 	$gTask->store( $updatetask );
-	 	$gBitUser->storePreference('task_process', $_REQUEST['content_id'] );
-		$userstate = $_REQUEST['content_id']; 	
+	 	$gBitUser->storePreference('task_process', 0 );
+		$userstate = 0; 	
+	} else if( !empty( $_REQUEST['refer'] ) ) {
+		$updatetask = array();
+		$updatetask['new_room'] = $gTask->mInfo['department'] + 80;
+	 	$gTask->store( $updatetask ); 	
+		$gBitUser->storePreference('task_process', 0 );
+		$userstate = 0; 	
 	} else if( !empty( $_REQUEST['new_tag'] ) ) {
 		$updatetask = array();
 		$updatetask['new_tag'] = $_REQUEST['new_tag'];
@@ -46,7 +52,7 @@ if ( $userstate ) {
 	$gTask = new Tasks();
 }
 
-if ( $gTask->isValid() ) {
+if ( $gTask->isValid() and $userstate <> 0 ) {
 	$gBitSmarty->assign_by_ref( 'userstate', $userstate );
 	$gBitSmarty->assign_by_ref( 'taskInfo', $gTask->mInfo );
 	$dept_tree = $gTask->listQueues();

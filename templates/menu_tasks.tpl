@@ -1,8 +1,8 @@
-{* $Header: /cvsroot/bitweaver/_bit_tasks/templates/menu_tasks.tpl,v 1.4 2009/01/13 08:45:25 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tasks/templates/menu_tasks.tpl,v 1.5 2009/01/13 13:16:44 lsces Exp $ *}
 {strip}
 <ul>
 	{if $userstate > 0 }
-			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}task_refer.php">{biticon iname="go-down" iexplain="Refer to waiting list" ilocation=menu}</a></li>
+			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}index.php?refer=1">{biticon iname="go-down" iexplain="Refer to waiting list" ilocation=menu}</a></li>
 			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}index.php?finish=1">{biticon iname="go-right" iexplain="Finish" ilocation=menu}</a></li>
 			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}find_citizen.php">{biticon iname="go-right" iexplain="Find existing citizen" ilocation=menu}</a></li>
 			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_citizen.php">{biticon iname="go-right" iexplain="Create new citizen" ilocation=menu}</a></li>
