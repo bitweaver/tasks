@@ -13,6 +13,10 @@
 			{/if}
 		{/if}
 
+		{if $citizenInfo or $backoffice}
+			{include file="bitpackage:tasks/task_survey.tpl"}
+		{/if}
+
 		{if $citizenInfo}
 			{include file="bitpackage:citizen/citizen_header.tpl"}
 			{include file="bitpackage:citizen/citizen_date_bar.tpl"}

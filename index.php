@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_tasks/index.php,v 1.6 2009/01/13 13:16:44 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_tasks/index.php,v 1.7 2009/01/13 13:59:04 lsces Exp $
  *
  * Copyright (c) 2006 bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -64,6 +64,7 @@ if ( $gTask->isValid() and $userstate <> 0 ) {
 	$gCitizen = new Citizen( null, $gTask->mCitizenId );
 	$gCitizen->load();
 	if ( $gCitizen->isValid() ) {
+		$gCitizen->loadXrefList();
 		$gBitSmarty->assign_by_ref( 'citizenInfo', $gCitizen->mInfo );
 	}
 	

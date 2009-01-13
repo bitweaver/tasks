@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.5 2009/01/13 13:06:39 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.6 2009/01/13 13:59:04 lsces Exp $
  *
  * Copyright ( c ) 2006 bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -79,14 +79,14 @@ class Tasks extends LibertyContent {
 				$this->mInfo = $result->fields;
 				$this->mContentId = (int)$result->fields['content_id'];
 				$this->mCitizenId = (int)$result->fields['caller_id'];
-				$this->mInfo['creator'] = (isset( $result->fields['creator_real_name'] ) ? $result->fields['creator_real_name'] : $result->fields['creator_user'] );
-				$this->mInfo['editor'] = (isset( $result->fields['modifier_real_name'] ) ? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['title'] = 'Ticket Number - '.$this->mInfo['ticket_no'];
-				
+				$this->mInfo['reason'] = $this->mInfo['tag_abv'].' - '.$this->mInfo['reason'];
+			
 			}
 		}
 		LibertyContent::load();
+		$this->loadTransactionList();
 		return;
 	}
 
@@ -646,28 +646,20 @@ class Tasks extends LibertyContent {
 	}
 
 	/**
-	 * getXrefList( &$pParamHash );
-	 * Get list of xref records for this citizen record
+	 * loadTransactionList( &$pParamHash );
+	 * Get list of transaction records relating to the active ticket
 	 */
-	function loadXrefList() {
-		if( $this->isValid() && empty( $this->mInfo['xref'] ) ) {
+	function loadTransactionList() {
+		if( $this->isValid() ) {
 		
-			$sql = "SELECT x.`last_update_date`, x.`source`, x.`cross_reference` 
-				FROM `".BIT_DB_PREFIX."citizen_xref` x
-				WHERE x.content_id = ?";
+			$sql = "SELECT tran.* 
+				FROM `".BIT_DB_PREFIX."task_transaction` tran
+				WHERE tran.ticket_id = ?";
 
 			$result = $this->mDb->query( $sql, array( $this->mContentId ) );
 
 			while( $res = $result->fetchRow() ) {
-				$this->mInfo['xref'][] = $res;
-				if ( $res['source'] == 'POSTFIELD' ) $caller[] = $res['cross_reference'];
-			}
-
-			$sql = "SELECT t.* FROM `".BIT_DB_PREFIX."task_ticket` t 
-				WHERE t.usn = ?";
-			$result = $this->mDb->query( $sql, array( $this->mCitizenId ) );
-			while( $res = $result->fetchRow() ) {
-				$this->mInfo['tickets'][] = $res;
+				$this->mInfo['trans'][$res['transact_no']] = $res;
 			}
 		}
 	}
