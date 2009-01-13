@@ -1,4 +1,3 @@
-<div class="body">
 	<div class="content">
 
 		<div class="row">
@@ -32,4 +31,3 @@
 			{/forminput}
 		</div>
 	</div><!-- end .content -->
-</div><!-- end .body -->

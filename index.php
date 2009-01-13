@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_tasks/index.php,v 1.4 2009/01/13 08:39:08 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_tasks/index.php,v 1.5 2009/01/13 13:06:39 lsces Exp $
  *
  * Copyright (c) 2006 bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -28,6 +28,10 @@ if ( $userstate ) {
 	 	$gTask->store( $updatetask );
 	 	$gBitUser->storePreference('task_process', $_REQUEST['content_id'] );
 		$userstate = $_REQUEST['content_id']; 	
+	} else if( !empty( $_REQUEST['new_tag'] ) ) {
+		$updatetask = array();
+		$updatetask['new_tag'] = $_REQUEST['new_tag'];
+	 	$gTask->store( $updatetask ); 	
 	} else if( !empty( $_REQUEST['new_dept'] ) ) {
 		$updatetask = array();
 		$updatetask['new_dept'] = $_REQUEST['new_dept'];
@@ -45,7 +49,10 @@ if ( $userstate ) {
 if ( $gTask->isValid() ) {
 	$gBitSmarty->assign_by_ref( 'userstate', $userstate );
 	$gBitSmarty->assign_by_ref( 'taskInfo', $gTask->mInfo );
-	$gBitSmarty->assign_by_ref( 'departments', $gTask->listQueues() );
+	$dept_tree = $gTask->listQueues();
+	$gBitSmarty->assign_by_ref( 'departments', $dept_tree['depts'] );
+	$gBitSmarty->assign_by_ref( 'tags', $dept_tree['tags'] );
+	$gBitSmarty->assign_by_ref( 'subtags', $dept_tree['subtags'] );
 
 	require_once( CITIZEN_PKG_PATH.'Citizen.php');
 	$gCitizen = new Citizen( null, $gTask->mCitizenId );

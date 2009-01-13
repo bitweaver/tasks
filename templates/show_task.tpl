@@ -8,6 +8,7 @@
 			{if $taskInfo.department eq 0}
 				{include file="bitpackage:tasks/select_department.tpl"}
 			{else}
+				{include file="bitpackage:tasks/select_reasons.tpl"}
 				{include file="bitpackage:tasks/display_task.tpl"}
 			{/if}
 		{/if}

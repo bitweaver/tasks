@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.4 2009/01/13 08:39:08 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.5 2009/01/13 13:06:39 lsces Exp $
  *
  * Copyright ( c ) 2006 bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -60,7 +60,10 @@ class Tasks extends LibertyContent {
 	function load($pContentId = NULL) {
 		if ( $pContentId ) $this->mContentId = (int)$pContentId;
 		if( $this->verifyId( $this->mContentId ) ) {
- 			$query = "select ti.*, lc.*, rs.`title` AS dept_title, tag.`title` AS reason, 
+ 			$query = "select ti.*, lc.*, rs.`title` AS dept_title, rs.`ter_type` AS dept_mode,
+ 				tag.`title` AS reason, tag.`reason_source` AS subtag, tag.`tag` AS tag_abv,
+ 				MOD( ti.`clearance`, 256 ) AS clearance_code,
+				CAST( ti.`clearance` / 256 AS INTEGER ) AS survey,
 				uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name,
 				uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name
 				FROM `".BIT_DB_PREFIX."task_ticket` ti
@@ -80,6 +83,7 @@ class Tasks extends LibertyContent {
 				$this->mInfo['editor'] = (isset( $result->fields['modifier_real_name'] ) ? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['title'] = 'Ticket Number - '.$this->mInfo['ticket_no'];
+				
 			}
 		}
 		LibertyContent::load();
@@ -123,6 +127,10 @@ class Tasks extends LibertyContent {
 			}
 			if ( !empty( $pParamHash['new_room'] ) ) {
 				$pParamHash['task_store']['room'] = $pParamHash['new_room'];
+				// Add transaction table insert here to replace database trigger
+			}
+			if ( !empty( $pParamHash['new_tag'] ) ) {
+				$pParamHash['task_store']['tags'] = $pParamHash['new_tag'];
 				// Add transaction table insert here to replace database trigger
 			}
 		}
@@ -367,7 +375,14 @@ class Tasks extends LibertyContent {
 			FROM `".BIT_DB_PREFIX."task_roomstat` rs
 			WHERE rs.`ter_type` > 6 AND rs.`terminal` > 80
 			ORDER BY rs.`terminal`";
-		$result = $this->mDb->GetAssoc( $query );
+		$result = array();
+		$result['depts'] = $this->mDb->GetAssoc( $query );
+		if ( $this->mInfo['department'] > 0 ) {
+			$result['tags']	= $this->mDb->GetAssoc("SELECT `reason`, `reason` AS tag_no, `title`, `tag` FROM `".BIT_DB_PREFIX."task_reason` WHERE `reason_type` = ".$this->mInfo['department']." ORDER BY `reason`");
+			if ( $this->mInfo['subtag'] > 0 ) {
+				$result['subtags'] = $this->mDb->GetAssoc("SELECT `reason`, `reason` AS tag_no, `title`, `tag` FROM `".BIT_DB_PREFIX."task_reason` WHERE `reason_type` = ".$this->mInfo['subtag']." ORDER BY `reason`");
+			}
+		}
 		return $result;
 	}
 	
