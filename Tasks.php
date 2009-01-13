@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.6 2009/01/13 13:59:04 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.7 2009/01/13 20:16:45 lsces Exp $
  *
  * Copyright ( c ) 2006 bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -82,7 +82,7 @@ class Tasks extends LibertyContent {
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
 				$this->mInfo['title'] = 'Ticket Number - '.$this->mInfo['ticket_no'];
 				$this->mInfo['reason'] = $this->mInfo['tag_abv'].' - '.$this->mInfo['reason'];
-			
+				if ( $this->mInfo['department'] == 0 ) { $this->mInfo['dept_title'] = 'Please select a department'; }
 			}
 		}
 		LibertyContent::load();
@@ -149,23 +149,21 @@ class Tasks extends LibertyContent {
 			$this->mDb->StartTrans();
 			if ( LibertyContent::store( $pParamHash ) ) {
 				$table = BIT_DB_PREFIX."task_ticket";
-				if( $this->isValid() ) {
-					if( !empty( $pParamHash['task_store'] ) ) {
+				if( $this->isValid() && !empty( $pParamHash['task_store'] ) ) {
 						$result = $this->mDb->associateUpdate( $table, $pParamHash['task_store'], array( "ticket_id" => $this->mContentId ) );
-					}
 				} else {
 					global $gBitUser;
 					
 					$pParamHash['task_store']['ticket_id'] = $pParamHash['content_id'];
 					$pParamHash['task_store']['ticket_ref'] = $this->mDb->NOW();
 					$pParamHash['task_store']['last'] = $this->mDb->NOW();
-					$pParamHash['task_store']['ticket_no'] = $pParamHash['offset']+1;
+					$pParamHash['task_store']['ticket_no'] = $pParamHash['task_offset']+1;
 					$pParamHash['task_store']['office'] = 1;
 					$pParamHash['task_store']['staff_id'] = $gBitUser->mUserId;
 					$pParamHash['task_store']['init_id'] = $gBitUser->mUserId;
 					$pParamHash['task_store']['caller_id'] = 0;
 					$pParamHash['task_store']['department'] = 0;
-					
+				
 					$this->mContentId = $pParamHash['content_id'];
 					$result = $this->mDb->associateInsert( $table, $pParamHash['task_store'] );
 				}

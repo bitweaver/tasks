@@ -1,3 +1,4 @@
+{include file="bitpackage:tasks/select_reasons.tpl"}
 <div class="display task">
 	<div class="header">
 		<h1>{$taskInfo.title}</h1>
@@ -8,7 +9,6 @@
 			{if $taskInfo.department eq 0}
 				{include file="bitpackage:tasks/select_department.tpl"}
 			{else}
-				{include file="bitpackage:tasks/select_reasons.tpl"}
 				{include file="bitpackage:tasks/display_task.tpl"}
 			{/if}
 		{/if}

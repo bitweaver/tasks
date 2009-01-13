@@ -1,6 +1,6 @@
 <?php
 /**
- * @version      $Header: /cvsroot/bitweaver/_bit_tasks/add_enquiry.php,v 1.2 2009/01/13 08:39:08 lsces Exp $
+ * @version      $Header: /cvsroot/bitweaver/_bit_tasks/add_enquiry.php,v 1.3 2009/01/13 20:16:45 lsces Exp $
  *
  * @author       lsces  <lester@lsces.co.uk>
  * @package      tasks
@@ -26,10 +26,11 @@ if( !empty( $_REQUEST['pass'] ) ) {
 	$offset =  50000;
 }
 $newtask = array();
-$newtask['offset'] = $offset;
-$gTask->store($newtask);
-vd($gTask);
+$newtask['task_offset'] = $offset;
+$gTask->store( $newtask );
+$gBitUser->storePreference('task_process', $gTask->mContentId );
 
-// Display the template
-$gBitSystem->display( 'bitpackage:tasks/show_task.tpl', tra( 'New Enquiry' ) , array( 'display_mode' => 'display' ));
+// Refresh display
+//header ("location: ".TASKS_PKG_URL."index.php");
+//die;
 ?>

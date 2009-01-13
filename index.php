@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_tasks/index.php,v 1.7 2009/01/13 13:59:04 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_tasks/index.php,v 1.8 2009/01/13 20:16:45 lsces Exp $
  *
  * Copyright (c) 2006 bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -38,9 +38,10 @@ if ( $userstate ) {
 		$updatetask = array();
 		$updatetask['new_tag'] = $_REQUEST['new_tag'];
 	 	$gTask->store( $updatetask ); 	
-	} else if( !empty( $_REQUEST['new_dept'] ) ) {
+	} else if( !empty( $_REQUEST['new_dept'] ) and ( $_REQUEST['new_dept'] <> $gTask->mInfo['department'] ) ) {
 		$updatetask = array();
 		$updatetask['new_dept'] = $_REQUEST['new_dept'];
+	 	$updatetask['new_tag'] = 0;
 	 	$gTask->store( $updatetask ); 	
 	}	
 } else if( !empty( $_REQUEST['content_id'] ) ) {

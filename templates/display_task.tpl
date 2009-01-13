@@ -3,19 +3,19 @@
 		<div class="row">
 			{formlabel label="Issued" for="department"}
 			{forminput}
-				{$taskInfo.ticket_ref|bit_short_time} {$taskInfo.ticket_no|bit_short_time}
+				{$taskInfo.ticket_ref|bit_short_time} {$taskInfo.ticket_no}
 			{/forminput}
 		</div>
 		<div class="row">
 			{formlabel label="Department" for="department"}
 			{forminput}
-				{$taskInfo.dept_title|escape} 
+				<a class="button" accesskey="D" href="#" onmouseover="menu.show('mDept', '', this, 50, -10)" onmouseout="menu.hide('mDept')">{$taskInfo.dept_title|escape}</a>
 			{/forminput}
 		</div>
 		<div class="row">
-			{formlabel label="Reason" for="department"}
+			{formlabel label="Reason" for="reason"}
 			{forminput}
-				{$taskInfo.reason|escape} 
+				<a class="button" accesskey="S" href="#" onmouseover="menu.show('mTag', '', this, 0, -20)" onmouseout="menu.hide('mTag')">Tag</a>&nbsp;-&nbsp;<a class="button" href="#" onmouseover="menu.show('mSub', '', this, 50, -10)" onmouseout="menu.hide('mSub')">{$taskInfo.reason|escape}</a>
 			{/forminput}
 		</div>
 		<div class="row">
