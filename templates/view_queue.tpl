@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tasks/templates/view_tickets.tpl,v 1.2 2009/01/13 08:39:08 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tasks/templates/view_queue.tpl,v 1.1 2009/01/13 08:39:08 lsces Exp $ *}
 {strip}
 <div class="display tasks">
 	<div class="header">
@@ -10,10 +10,9 @@
 
 		<div class="row">
 			<table>
-				<caption>{tr}List of Current Days enquiries{/tr}</caption>
 				<thead>
 					<tr>
-						<th>Date</th>
+						<th>Time</th>
 						<th>Name</th>
 						<th>Reason</th>
 						<th>Note</th>
@@ -29,13 +28,13 @@
 								{$currentInfo.tickets[ticket].forename|escape} {$currentInfo.tickets[ticket].surname|escape}
 							</td>
 							<td>
-								{$currentInfo.tickets[ticket].tags|escape}
+								{$currentInfo.tickets[ticket].reason|escape}
 							</td>
 							<td>
 								<span class="actionicon">
-									{smartlink ititle="View" ifile="index.php" ibiticon="icons/accessories-text-editor" content_id=$currentInfo.tickets[ticket].ticket_id}
+									{smartlink ititle="View" ifile="index.php" ibiticon="icons/accessories-text-editor" content_id=$currentInfo.tickets[ticket].content_id}
 								</span>
-								<label for="ev_{$currentInfo.tickets[ticket].content_id}">	
+								<label for="ev_{$currentInfo.tickets[ticket].ticket_no}">	
 									{$currentInfo.tickets[ticket].creator_real_name}
 								</label>
 							</td>
@@ -50,7 +49,7 @@
 				</tbody>
 			</table>
 		</div>
-
+		{pagination}
 	</div><!-- end .body -->
 </div><!-- end .tasks -->
 {/strip}

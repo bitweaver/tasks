@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.3 2009/01/12 20:07:25 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.4 2009/01/13 08:39:08 lsces Exp $
  *
  * Copyright ( c ) 2006 bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -42,6 +42,7 @@ class Tasks extends LibertyContent {
 			) );
 		$this->mTicketId = (int)$pTicketId;
 		$this->mContentId = (int)$pContentId;
+		$this->mCitizenId = 0;
 		$this->mContentTypeGuid = TASKS_CONTENT_TYPE_GUID;
 				// Permission setup
 		$this->mViewContentPerm  = 'p_tasks_view';
@@ -59,32 +60,26 @@ class Tasks extends LibertyContent {
 	function load($pContentId = NULL) {
 		if ( $pContentId ) $this->mContentId = (int)$pContentId;
 		if( $this->verifyId( $this->mContentId ) ) {
- 			$query = "select ci.*, a.*, n.*, p.*, lc.*,
+ 			$query = "select ti.*, lc.*, rs.`title` AS dept_title, tag.`title` AS reason, 
 				uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name,
 				uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name
-				FROM `".BIT_DB_PREFIX."citizen` ci
-				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON ( lc.`content_id` = ci.`content_id` )
+				FROM `".BIT_DB_PREFIX."task_ticket` ti
+				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON ( lc.`content_id` = ti.`ticket_id` )
 				LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON (uue.`user_id` = lc.`modifier_user_id`)
 				LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON (uuc.`user_id` = lc.`user_id`)
-				LEFT JOIN `".BIT_DB_PREFIX."address_book` a ON a.usn = ci.usn
-				LEFT JOIN `".BIT_DB_PREFIX."nlpg_blpu` n ON n.`uprn` = ci.`nlpg`
-				LEFT JOIN `".BIT_DB_PREFIX."nlpg_lpi` p ON p.`uprn` = ci.`nlpg` AND p.`language` = 'ENG' AND p.`logical_status` = 1
-				WHERE ci.`content_id`=?";
+				LEFT JOIN `".BIT_DB_PREFIX."task_roomstat` rs ON (ti.`department` + 80 = rs.`terminal`)
+				LEFT JOIN `".BIT_DB_PREFIX."task_reason` tag ON (ti.`tags` = tag.`reason`)
+				WHERE ti.`ticket_id`=?";
 			$result = $this->mDb->query( $query, array( $this->mContentId ) );
 
 			if ( $result && $result->numRows() ) {
 				$this->mInfo = $result->fields;
 				$this->mContentId = (int)$result->fields['content_id'];
-				$this->mCitizenId = (int)$result->fields['usn'];
-				$this->mParentId = (int)$result->fields['usn'];
-				$this->mCitizenName = $result->fields['title'];
+				$this->mCitizenId = (int)$result->fields['caller_id'];
 				$this->mInfo['creator'] = (isset( $result->fields['creator_real_name'] ) ? $result->fields['creator_real_name'] : $result->fields['creator_user'] );
 				$this->mInfo['editor'] = (isset( $result->fields['modifier_real_name'] ) ? $result->fields['modifier_real_name'] : $result->fields['modifier_user'] );
 				$this->mInfo['display_url'] = $this->getDisplayUrl();
-				$os1 = new OSRef($this->mInfo['x_coordinate'], $this->mInfo['y_coordinate']);
-				$ll1 = $os1->toLatLng();
-				$this->mInfo['prop_lat'] = $ll1->lat;
-				$this->mInfo['prop_lng'] = $ll1->lng;
+				$this->mInfo['title'] = 'Ticket Number - '.$this->mInfo['ticket_no'];
 			}
 		}
 		LibertyContent::load();
@@ -114,38 +109,29 @@ class Tasks extends LibertyContent {
 			unset( $pParamHash['content_id'] );
 		}
 
-		if ( empty( $pParamHash['parent_id'] ) )
-			$pParamHash['parent_id'] = $this->mContentId;
-			
 		// content store
 		// check for name issues, first truncate length if too long
-		if( empty( $pParamHash['surname'] ) || empty( $pParamHash['forename'] ) )  {
-			$this->mErrors['names'] = 'You must enter a forename and surname for this citizen.';
-		} else {
-			$pParamHash['title'] = substr( $pParamHash['prefix'].' '.$pParamHash['forename'].' '.$pParamHash['surname'].' '.$pParamHash['suffix'], 0, 160 );
-			$pParamHash['content_store']['title'] = $pParamHash['title'];
-		}	
 
 		// Secondary store entries
-		$pParamHash['citizen_store']['prefix'] = $pParamHash['prefix'];
-		$pParamHash['citizen_store']['forename'] = $pParamHash['forename'];
-		$pParamHash['citizen_store']['surname'] = $pParamHash['surname'];
-		$pParamHash['citizen_store']['suffix'] = $pParamHash['suffix'];
-		$pParamHash['citizen_store']['organisation'] = $pParamHash['organisation'];
-
-		if ( !empty( $pParamHash['nino'] ) ) $pParamHash['citizen_store']['nino'] = $pParamHash['nino'];
-		if ( !empty( $pParamHash['dob'] ) ) $pParamHash['citizen_store']['dob'] = $pParamHash['dob'];
-		if ( !empty( $pParamHash['eighteenth'] ) ) $pParamHash['citizen_store']['eighteenth'] = $pParamHash['eighteenth'];
-		if ( !empty( $pParamHash['dod'] ) ) $pParamHash['citizen_store']['dod'] = $pParamHash['dod'];
-
+		if( $this->isValid() ) {
+			if ( !empty( $pParamHash['new_citizen'] ) ) {
+				$pParamHash['task_store']['caller_id'] = $pParamHash['new_citizen'];
+				$pParamHash['task_store']['usn'] = $pParamHash['new_citizen'];
+			}
+			if ( !empty( $pParamHash['new_dept'] ) ) {
+				$pParamHash['task_store']['department'] = $pParamHash['new_dept'];
+			}
+			if ( !empty( $pParamHash['new_room'] ) ) {
+				$pParamHash['task_store']['room'] = $pParamHash['new_room'];
+				// Add transaction table insert here to replace database trigger
+			}
+		}
 		return( count( $this->mErrors ) == 0 );
 	}
 
 	/**
 	* Store task data
 	* @param $pParamHash contains all data to store the task ticket
-	* @param $pParamHash[title] title of the new citizen
-	* @param $pParamHash[edit] description of the citizen
 	* @return bool TRUE on success, FALSE if store could not occur. If FALSE, $this->mErrors will have reason why
 	**/
 	function store( &$pParamHash ) {
@@ -154,34 +140,33 @@ class Tasks extends LibertyContent {
 
 			$this->mDb->StartTrans();
 			if ( LibertyContent::store( $pParamHash ) ) {
-				$table = BIT_DB_PREFIX."citizen";
-
-				// mContentId will not be set until the secondary data has commited 
-				if( $this->verifyId( $this->mCitizenId ) ) {
-					if( !empty( $pParamHash['citizen_store'] ) ) {
-						$result = $this->mDb->associateUpdate( $table, $pParamHash['citizen_store'], array( "content_id" => $this->mContentId ) );
+				$table = BIT_DB_PREFIX."task_ticket";
+				if( $this->isValid() ) {
+					if( !empty( $pParamHash['task_store'] ) ) {
+						$result = $this->mDb->associateUpdate( $table, $pParamHash['task_store'], array( "ticket_id" => $this->mContentId ) );
 					}
 				} else {
-					$pParamHash['citizen_store']['content_id'] = $pParamHash['content_id'];
-					$pParamHash['citizen_store']['usn'] = $pParamHash['content_id'];
-					if( isset( $pParamHash['citizen_id'] ) && is_numeric( $pParamHash['citizen_id'] ) ) {
-						$pParamHash['citizen_store']['usn'] = $pParamHash['citizen_id'];
-					} else {
-						$pParamHash['citizen_store']['usn'] = $this->mDb->GenID( 'citizen_id_seq');
-					}	
-
-					$pParamHash['citizen_store']['parent_id'] = $pParamHash['citizen_store']['content_id'];
-					$this->mCitizenId = $pParamHash['citizen_store']['content_id'];
-					$this->mParentId = $pParamHash['citizen_store']['parent_id'];
+					global $gBitUser;
+					
+					$pParamHash['task_store']['ticket_id'] = $pParamHash['content_id'];
+					$pParamHash['task_store']['ticket_ref'] = $this->mDb->NOW();
+					$pParamHash['task_store']['last'] = $this->mDb->NOW();
+					$pParamHash['task_store']['ticket_no'] = $pParamHash['offset']+1;
+					$pParamHash['task_store']['office'] = 1;
+					$pParamHash['task_store']['staff_id'] = $gBitUser->mUserId;
+					$pParamHash['task_store']['init_id'] = $gBitUser->mUserId;
+					$pParamHash['task_store']['caller_id'] = 0;
+					$pParamHash['task_store']['department'] = 0;
+					
 					$this->mContentId = $pParamHash['content_id'];
-					$result = $this->mDb->associateInsert( $table, $pParamHash['citizen_store'] );
+					$result = $this->mDb->associateInsert( $table, $pParamHash['task_store'] );
 				}
 				// load before completing transaction as firebird isolates results
 				$this->load();
 				$this->mDb->CompleteTrans();
 			} else {
 				$this->mDb->RollbackTrans();
-				$this->mErrors['store'] = 'Failed to store this citizen.';
+				$this->mErrors['store'] = 'Failed to store this task ticket.';
 			}
 		}
 		return( count( $this->mErrors ) == 0 );
@@ -210,7 +195,7 @@ class Tasks extends LibertyContent {
 	}
     
 	/**
-	 * Returns Request_URI to a Citizen content object
+	 * Returns Request_URI to a Task content object
 	 *
 	 * @param string name of
 	 * @param array different possibilities depending on derived class
@@ -226,7 +211,7 @@ class Tasks extends LibertyContent {
 	}
 
 	/**
-	 * Returns HTML link to display a Citizen object
+	 * Returns HTML link to display a Task object
 	 * 
 	 * @param string Not used ( generated locally )
 	 * @param array mInfo style array of content information
@@ -244,7 +229,8 @@ class Tasks extends LibertyContent {
 	}
 
 	/**
-	 * Returns title of an Citizen object
+	 * Returns title of an Task object
+	 * @todo Need to expand this to handle type of task and date information
 	 *
 	 * @param array mInfo style array of content information
 	 * @return string Text for the title description
@@ -261,13 +247,60 @@ class Tasks extends LibertyContent {
 		}
 
 		if( !empty( $pHash['title'] ) ) {
-			$ret = "Citizen - ".$this->mInfo['title'];
+			$ret = "Ticket - ".$this->mInfo['title'];
 		} elseif( !empty( $pHash['content_description'] ) ) {
 			$ret = $pHash['content_description'];
 		}
 		return $ret;
 	}
 
+	/**
+	 * Returns title of a queue 
+	 * @todo Need to cache department/queue information in object
+	 *
+	 * @param integer Queue Number
+	 * @return string Text for the title description
+	 */
+	function getQueueTitle( $queue ) {
+		$query = "SELECT rs.`title` AS queue FROM `".BIT_DB_PREFIX."task_roomstat` rs WHERE rs.`terminal` = 80 + $queue";
+		return $this->mDb->getOne( $query );
+	}
+	
+	/**
+	 * Gets the next ticket number from a queue 
+	 *
+	 * @param integer Queue Number
+	 * @return bool True if switched to a valid task
+	 */
+	function getNextTask( $queue ) {
+		$query = "SELECT cd.`ticket_id` FROM  `".BIT_DB_PREFIX."task_ticket` cd
+						 WHERE cd.`ticket_ref` BETWEEN 'TODAY' AND 'TOMORROW' AND cd.`room` = $queue + 80
+						 AND cd.`office` = 1
+				  		 ORDER BY cd.`ticket_ref`";
+		$next = $this->mDb->getOne( $query );
+// Add switch of user state to serving!
+		if ( $next ) return true;
+		else return false;
+	}
+	
+	/**
+	 * Returns title of a queue 
+	 * @todo Need to cache department/queue information in object
+	 *
+	 * @param integer Queue Number
+	 * @return string Text for the title description
+	 */
+	function createTask( $queue ) {
+		$query = "SELECT cd.`ticket_id` FROM  `".BIT_DB_PREFIX."task_ticket` cd
+						 WHERE ti.`ticket_ref` BETWEEN TODAY AND TOMORROW AND cd.`room` = $queue + 80
+						 AND cd.`office` = 1
+				  		 ORDER BY cd.`ticket_ref`";
+		$next = $this->mDb->getOne( $query );
+// Add switch of user state to serving!
+		if ( $next ) return true;
+		else return false;
+	}
+	
 	/**
 	 * Returns list of tesk entries
 	 *
@@ -279,33 +312,33 @@ class Tasks extends LibertyContent {
 		
 		$whereSql = $joinSql = $selectSql = '';
 		$bindVars = array();
-		array_push( $bindVars, $this->mContentTypeGuid );
-		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
+// Update to more flexible date management later
+		array_push( $bindVars, 'TODAY' );
+		array_push( $bindVars, 'TOMORROW' );
+//		$this->getServicesSql( 'content_list_sql_function', $selectSql, $joinSql, $whereSql, $bindVars );
 
-		if ( isset($pListHash['find']) ) {
-			$findesc = '%' . strtoupper( $pListHash['find'] ) . '%';
-			$whereSql .= " AND (UPPER(con.`SURNAME`) like ? or UPPER(con.`FORENAME`) like ?) ";
-			array_push( $bindVars, $findesc );
+		if ( isset($pListHash['queue_id']) ) {
+			$whereSql .= " AND ti.`room` = 80 + ? ";
+			array_push( $bindVars, $pListHash['queue_id'] );
 		}
 
-		if ( isset($pListHash['add_sql']) ) {
-			$whereSql .= " AND $add_sql ";
-		}
+// init_id and staff_id will map to creator_user_id and modifier_user_id when fully converted to LC
+// , lc.* 				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON ( lc.`content_id` = ci.`content_id` )
 
-		$query = "SELECT con.*, lc.*, 
+		$query = "SELECT ti.*, ci.*, tr.`title` as reason,
 				uue.`login` AS modifier_user, uue.`real_name` AS modifier_real_name,
 				uuc.`login` AS creator_user, uuc.`real_name` AS creator_real_name $selectSql
-				FROM `".BIT_DB_PREFIX."citizen` ci 
-				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON ( lc.`content_id` = ci.`content_id` )
-				LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON (uue.`user_id` = lc.`modifier_user_id`)
-				LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON (uuc.`user_id` = lc.`user_id`)
+				FROM `".BIT_DB_PREFIX."task_ticket` ti 
+				LEFT JOIN `".BIT_DB_PREFIX."users_users` uue ON (uue.`user_id` = ti.`staff_id`)
+				LEFT JOIN `".BIT_DB_PREFIX."users_users` uuc ON (uuc.`user_id` = ti.`init_id`)
+				LEFT JOIN `".BIT_DB_PREFIX."citizen` ci ON (ci.`usn` = ti.`usn`)
+				LEFT JOIN `".BIT_DB_PREFIX."task_reason` tr ON (tr.`reason` = ti.`tags`)
 				$joinSql
-				WHERE lc.`content_type_guid`=? $whereSql  
-				order by ".$this->mDb->convertSortmode( $pListHash['sort_mode'] );
-		$query_cant = "SELECT COUNT(lc.`content_id`) FROM `".BIT_DB_PREFIX."citizen` ci
-				INNER JOIN `".BIT_DB_PREFIX."liberty_content` lc ON ( lc.`content_id` = ci.`content_id` )
+				WHERE ti.`ticket_ref` BETWEEN ? AND ? $whereSql  
+				order by ti.`ticket_ref`";
+		$query_cant = "SELECT COUNT(ti.`ticket_no`) FROM `".BIT_DB_PREFIX."task_ticket` ti
 				$joinSql
-				WHERE lc.`content_type_guid`=? $whereSql";
+				WHERE ti.`ticket_ref` BETWEEN ? AND ? $whereSql";
 
 		$ret = array();
 		$this->mDb->StartTrans();
@@ -314,7 +347,7 @@ class Tasks extends LibertyContent {
 		$this->mDb->CompleteTrans();
 
 		while ($res = $result->fetchRow()) {
-			$res['citizen_url'] = $this->getDisplayUrl( $res['content_id'] );
+			$res['ticket_url'] = $this->getDisplayUrl( $res['ticket_id'] );
 			$ret[] = $res;
 		}
 
@@ -324,10 +357,25 @@ class Tasks extends LibertyContent {
 	}
 	
 	/**
-	 * Returns list of activity queues
+	 * Returns list of queues
 	 *
 	 * @param integer 
 	 * @return array Queue records
+	 */
+	function listQueues() {
+		$query = "SELECT rs.`terminal` - 81, (rs.`terminal` - 80) AS que_no, rs.`title`, rs.`ter_type` AS dep_type
+			FROM `".BIT_DB_PREFIX."task_roomstat` rs
+			WHERE rs.`ter_type` > 6 AND rs.`terminal` > 80
+			ORDER BY rs.`terminal`";
+		$result = $this->mDb->GetAssoc( $query );
+		return $result;
+	}
+	
+	/**
+	 * Returns list of queue activity
+	 *
+	 * @param integer 
+	 * @return array Queue activity records
 	 */
 	function getQueueList( &$pListHash ) {
 		$query = "SELECT rs.`office`, rs.`terminal`, rs.`title`, rs.`ter_type`, rs.`x1` AS no_warn, rs.`x2` AS no_alarm, rs.`x3` AS aw_warn, rs.`x4` AS aw_alarm,
@@ -339,7 +387,7 @@ class Tasks extends LibertyContent {
 			GROUP BY rs.`office`, rs.`terminal`, rs.`title`, rs.`ter_type`, rs.`x1`, rs.`x2`, rs.`x3`, rs.`x4`
 			ORDER BY rs.`terminal`";
 
-		$result = $this->mDb->query( $query, $bindVars );
+		$result = $this->mDb->query( $query );
 		while ($res = $result->fetchRow()) {
 			$res['queue_id'] = $res['terminal'] - 80;
 			$res['display_url'] = TASKS_PKG_URL.'view_queue.php?queue_id='.$res['queue_id'];
