@@ -205,4 +205,10 @@ $gBitInstaller->registerPreferences( TASKS_PKG_NAME, array(
 	array( TASKS_PKG_NAME, 'task_list_user','y'),
 ) );
 
+// Processing/Serving will disable other access to that record, Finished will prevent any further editing of a record
+$gBitInstaller->registerSchemaDefault( LIBERTY_PKG_NAME, array(
+	"INSERT INTO `".BIT_DB_PREFIX."liberty_content_status` (`content_status_id`,`content_status_name`) VALUES (-50, 'Processing')",
+	"INSERT INTO `".BIT_DB_PREFIX."liberty_content_status` (`content_status_id`,`content_status_name`) VALUES (60, 'Finished')",
+) );
+
 ?>
