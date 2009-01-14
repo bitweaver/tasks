@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.7 2009/01/13 20:16:45 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.8 2009/01/14 12:05:42 lsces Exp $
  *
  * Copyright ( c ) 2006 bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -415,33 +415,54 @@ class Tasks extends LibertyContent {
 	 */
 	function TicketRecordLoad( &$data ) {
 		$table = BIT_DB_PREFIX."task_ticket";
-		
-		$pDataHash['data_store']['office'] = $data[0];
-		$pDataHash['data_store']['ticket_id'] = $data[1];
-		$pDataHash['data_store']['ticket_ref'] = $data[2];
-		$pDataHash['data_store']['ticket_no'] = $data[3];
-		$pDataHash['data_store']['tags'] = $data[4];
-		$pDataHash['data_store']['clearance'] = $data[5];
-		$pDataHash['data_store']['room'] = $data[6];
+
+		$pDataHash['ticket_store']['office'] = $data[0];
+		$pDataHash['ticket_store']['ticket_id'] = $data[1];
+		$pDataHash['ticket_store']['ticket_ref'] = $data[2];
+		$pDataHash['ticket_store']['ticket_no'] = $data[3];
+		$pDataHash['ticket_store']['tags'] = $data[4];
+		$pDataHash['ticket_store']['clearance'] = $data[5];
+		$pDataHash['ticket_store']['room'] = $data[6];
 		if ( $data[7] == '[null]' )
-			$pDataHash['data_store']['note'] = '';
+			$pDataHash['ticket_store']['note'] = '';
 		else
-			$pDataHash['data_store']['note'] = $data[7];
+			$pDataHash['ticket_store']['note'] = $data[7];
 		if ( $data[8] == '[null]' )
-			$pDataHash['data_store']['last'] = '';
+			$pDataHash['ticket_store']['last'] = '';
 		else
-			$pDataHash['data_store']['last'] = $data[8];
-		$pDataHash['data_store']['staff_id'] = $data[9];
-		$pDataHash['data_store']['init_id'] = $data[10];
-		$pDataHash['data_store']['caller_id'] = $data[11];
-		$pDataHash['data_store']['appoint_id'] = $data[12];
-		$pDataHash['data_store']['applet'] = $data[13];
-		if ( $data[14] != '[null]' ) $pDataHash['data_store']['memo'] = $data[14];
+			$pDataHash['ticket_store']['last'] = $data[8];
+		$pDataHash['ticket_store']['staff_id'] = $data[9];
+		$pDataHash['ticket_store']['init_id'] = $data[10];
+		$pDataHash['ticket_store']['caller_id'] = $data[11];
+		$pDataHash['ticket_store']['appoint_id'] = $data[12];
+		$pDataHash['ticket_store']['applet'] = $data[13];
+		if ( $data[14] != '[null]' ) $pDataHash['ticket_store']['memo'] = $data[14];
 		if ( $data[15] == '[null]' )
-			$pDataHash['data_store']['department'] = 0;
+			$pDataHash['ticket_store']['department'] = 0;
 		else
-			$pDataHash['data_store']['department'] = $data[15];
-		$result = $this->mDb->associateInsert( $table, $pDataHash['data_store'] );
+			$pDataHash['ticket_store']['department'] = $data[15];
+
+		// Create LC entry details from legacy data
+		global $gBitSystem;
+		
+		$this->mDb->StartTrans();
+		$this->mContentId = 0;
+		$pDataHash['content_id'] = 0;
+		$pDataHash['user_id'] = $pDataHash['ticket_store']['init_id'];
+		$pDataHash['modifier_user_id'] = $pDataHash['ticket_store']['staff_id'];
+		$pDataHash['created'] = $gBitSystem->mServerTimestamp->getTimestampFromISO($pDataHash['ticket_store']['ticket_ref'], true);
+		$pDataHash['event_time'] = $pDataHash['created'];
+		$pDataHash['last_modified'] = $gBitSystem->mServerTimestamp->getTimestampFromISO($pDataHash['ticket_store']['last'], true);
+		$pDataHash['title'] = $pDataHash['ticket_store']['ticket_ref'].'-Ticket-'.$pDataHash['ticket_store']['ticket_no'];
+		$pDataHash['content_status_id'] = 60; // Mark all records Finished - data can't be modified, so read only!
+		if ( LibertyContent::store( $pDataHash ) ) {
+			$pDataHash['ticket_store']['content_id'] = $pDataHash['content_id'];
+			$result = $this->mDb->associateInsert( $table, $pDataHash['ticket_store'] );
+			$this->mDb->CompleteTrans();
+		} else {
+			$this->mDb->RollbackTrans();
+			$this->mErrors['store'] = 'Failed to store this ticket.';
+		}				
 	}
 
 	/**
