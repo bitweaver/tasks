@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.8 2009/01/14 12:05:42 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.9 2009/01/14 16:25:25 lsces Exp $
  *
  * Copyright ( c ) 2006 bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -618,10 +618,16 @@ class Tasks extends LibertyContent {
 	function StaffRecordLoad( &$data ) {
 		$table = BIT_DB_PREFIX."task_staff";
 		
-		$pDataHash['data_store']['staff_id'] = $data[0];
+		$pDataHash['data_store']['user_id'] = $data[0];
+		$pDataHash['login_store']['user_id'] = $data[0];
 		$pDataHash['data_store']['surname'] = $data[1];
 		$pDataHash['data_store']['forename'] = $data[2];
 		$pDataHash['data_store']['initials'] = $data[3];
+		$pDataHash['login_store']['login'] = strtolower( $data[1].substr( $data[2], 0, 1 ) );
+		$pDataHash['login_store']['real_name'] = ucfirst( $data[2] ).' '.ucfirst( $data[1] );
+		$pDataHash['login_store']['password'] = $pDataHash['login_store']['login'];
+// Need to link this to system settings but manual will work for now
+		$pDataHash['login_store']['email'] = ucfirst( $data[2] ).'.'.ucfirst( $data[1] ).'@rother.gov.uk';
 		if ( $data[4] == '[null]' )
 			$pDataHash['data_store']['direct'] = '';
 		else
@@ -640,7 +646,18 @@ class Tasks extends LibertyContent {
 		$pDataHash['data_store']['logged'] = 0;
 		$pDataHash['data_store']['content_id'] = 0;
 		$pDataHash['data_store']['office'] = $data[14];
-		$result = $this->mDb->associateInsert( $table, $pDataHash['data_store'] );
+
+// Need to map category to role/group setting
+		$newUser = new BitPermUser();
+		$result = $newUser->ImportUser( $pDataHash['login_store'] );
+		$newUser->storePreference('phone_no', $data[4] );
+		$newUser->storePreference('team', $data[5] );
+// This should be populated by the system from site defaults
+		$newUser->storePreference('site_display_timezone', 'Europe/London' );
+		$newUser->storePreference('site_display_utc', 'Fixed' );
+		$newUser->storePreference('users_country', 'United_Kingdom' );
+		
+//		$result = $this->mDb->associateInsert( $table, $pDataHash['data_store'] );
 	}
 
 	/**
