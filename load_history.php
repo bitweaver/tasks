@@ -8,7 +8,7 @@
 
 // Initialization
 require_once( '../bit_setup_inc.php' );
-require_once( CITIZEN_PKG_PATH.'Citizen.php' );
+require_once( TASKS_PKG_PATH.'Tasks.php' );
 
 // Is package installed and enabled
 $gBitSystem->verifyPackage( 'citizen' );
@@ -16,11 +16,11 @@ $gBitSystem->verifyPackage( 'citizen' );
 // Now check permissions to access this page
 $gBitSystem->verifyPermission('p_citizen_admin' );
 
-$citizens = new Citizen();
+$task = new Tasks();
 set_time_limit(0);
 
 if( empty( $_REQUEST["update"] ) ) {
-	$citizens->HistoryExpunge();
+	$task->HistoryExpunge();
 	$update = 0;
 } else {
 	$update = $_REQUEST["update"];
@@ -34,7 +34,7 @@ if ( $handle == FALSE) {
 } else {
 	while (($data = fgetcsv($handle, 800, "\t")) !== FALSE) {
     	if ( $row ) {
-    		$citizens->TicketRecordLoad( $data );
+    		$task->TicketRecordLoad( $data );
     	}
     	$row++;
 	}
@@ -50,7 +50,7 @@ if ( $handle == FALSE) {
 } else {
 	while (($data = fgetcsv($handle, 4000, "\t")) !== FALSE) {
 		if ( $row ) {
-			$citizens->TransactionRecordLoad( $data );
+			$task->TransactionRecordLoad( $data );
 		}
     	$row++;
 	} 
@@ -65,7 +65,7 @@ if ( $handle == FALSE) {
 } else {
 	while (($data = fgetcsv($handle, 4000, "\t")) !== FALSE) {
 		if ( $row ) {
-			$citizens->ReasonRecordLoad( $data );
+			$task->ReasonRecordLoad( $data );
 		}
     	$row++;
 	} 
@@ -80,7 +80,7 @@ if ( $handle == FALSE) {
 } else {
 	while (($data = fgetcsv($handle, 4000, "\t")) !== FALSE) {
 		if ( $row ) {
-			$citizens->RoomstatRecordLoad( $data );
+			$task->RoomstatRecordLoad( $data );
 		}
     	$row++;
 	} 
@@ -95,7 +95,7 @@ if ( $handle == FALSE) {
 } else {
 	while (($data = fgetcsv($handle, 4000, "\t", '¬')) !== FALSE) {
 		if ( $row ) {
-			$citizens->CallerRecordLoad( $data );
+			$task->CallerRecordLoad( $data );
 		}
     	$row++;
 	} 
@@ -110,7 +110,7 @@ if ( $handle == FALSE) {
 } else {
 	while (($data = fgetcsv($handle, 4000, "\t")) !== FALSE) {
 		if ( $row ) {
-			$citizens->StaffRecordLoad( $data );
+			$task->StaffRecordLoad( $data );
 		}
     	$row++;
 	} 
@@ -118,5 +118,5 @@ if ( $handle == FALSE) {
 }
 $gBitSmarty->assign( 'staff', $row );
 
-$gBitSystem->display( 'bitpackage:citizen/load_history.tpl', tra( 'Load results: ' ) );
+$gBitSystem->display( 'bitpackage:tasks/load_history.tpl', tra( 'Load results: ' ) );
 ?>
