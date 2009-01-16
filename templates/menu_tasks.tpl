@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tasks/templates/menu_tasks.tpl,v 1.5 2009/01/13 13:16:44 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tasks/templates/menu_tasks.tpl,v 1.6 2009/01/16 20:32:38 lsces Exp $ *}
 {strip}
 <ul>
 	{if $userstate > 0 }
@@ -7,7 +7,7 @@
 			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}find_citizen.php">{biticon iname="go-right" iexplain="Find existing citizen" ilocation=menu}</a></li>
 			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_citizen.php">{biticon iname="go-right" iexplain="Create new citizen" ilocation=menu}</a></li>
 	{/if}
-	{if !$userstate or $userstate = 0  }
+	{if !$userstate or $userstate eq 0  }
 		{if $gBitUser->hasPermission( 'p_tasks_view' )}
 			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}view.php">{biticon iname="document-new" iexplain="View Queues" ilocation=menu}</a></li>
 			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}view_tickets.php">{biticon iname="document-new" iexplain="View Tasks" ilocation=menu}</a></li>
