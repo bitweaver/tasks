@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_tasks/liberty_plugins/data.dbreport.php,v 1.1 2009/02/24 08:29:26 lsces Exp $
+ * $Header: /cvsroot/bitweaver/_bit_tasks/liberty_plugins/data.dbreport.php,v 1.2 2009/02/24 11:14:55 lsces Exp $
  * @package  liberty
  * @subpackage plugins_data
  *
@@ -1465,7 +1465,6 @@ function wikiplugin_dbreport($data, $params) {
 	$wikiplugin_dbreport_fields = array();
 	$wikiplugin_dbreport_fields_allowed = false;
 	$wikiplugin_dbreport_record = null;
-
 	$ret = '';
 	// extract parameters
 	extract ($params,EXTR_SKIP);
@@ -1483,11 +1482,12 @@ function wikiplugin_dbreport($data, $params) {
 		$db = 'local';
 	}
 	// parse the report definition
+	// this needs tidying to selectivly handle html encoded data - fckedit and tinymce mess up source formatting
 //	$parse_fix = ($_REQUEST['preview']);
 //	if($parse_fix) {
-		$report =& wikiplugin_dbreport_parse($data);
+//		$report =& wikiplugin_dbreport_parse($data);
 //	} else {
-//		$report =& wikiplugin_dbreport_parse(html_entity_decode($data));
+		$report =& wikiplugin_dbreport_parse(html_entity_decode($data));
 //	}
 	// were there errors?
 	if($wikiplugin_dbreport_errors) {
