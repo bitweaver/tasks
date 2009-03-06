@@ -1,6 +1,6 @@
 <?php
 /**
- * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.9 2009/01/14 16:25:25 lsces Exp $
+ * @version $Header: /cvsroot/bitweaver/_bit_tasks/Tasks.php,v 1.10 2009/03/06 08:05:37 lsces Exp $
  *
  * Copyright ( c ) 2006 bitweaver.org
  * All Rights Reserved. See copyright.txt for details and a complete list of authors.
@@ -375,7 +375,7 @@ class Tasks extends LibertyContent {
 			ORDER BY rs.`terminal`";
 		$result = array();
 		$result['depts'] = $this->mDb->GetAssoc( $query );
-		if ( $this->mInfo['department'] > 0 ) {
+		if ( isset($this->mInfo['department']) && $this->mInfo['department'] > 0 ) {
 			$result['tags']	= $this->mDb->GetAssoc("SELECT `reason`, `reason` AS tag_no, `title`, `tag` FROM `".BIT_DB_PREFIX."task_reason` WHERE `reason_type` = ".$this->mInfo['department']." ORDER BY `reason`");
 			if ( $this->mInfo['subtag'] > 0 ) {
 				$result['subtags'] = $this->mDb->GetAssoc("SELECT `reason`, `reason` AS tag_no, `title`, `tag` FROM `".BIT_DB_PREFIX."task_reason` WHERE `reason_type` = ".$this->mInfo['subtag']." ORDER BY `reason`");
@@ -390,7 +390,7 @@ class Tasks extends LibertyContent {
 	 * @param integer 
 	 * @return array Queue activity records
 	 */
-	function getQueueList( &$pListHash ) {
+	function getQueueList( &$pListHash = NULL ) {
 		$query = "SELECT rs.`office`, rs.`terminal`, rs.`title`, rs.`ter_type`, rs.`x1` AS no_warn, rs.`x2` AS no_alarm, rs.`x3` AS aw_warn, rs.`x4` AS aw_alarm,
 			COUNT(tic.`ticket_ref`) AS `no_waiting`,
 			AVG(((CURRENT_TIMESTAMP - tic.`last`) * 86400)) AS `avg_wait`
