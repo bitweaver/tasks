@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tasks/modules/mod_menu.tpl,v 1.1 2008/12/24 09:04:37 lsces Exp $ *}
+{* $Header: /cvsroot/bitweaver/_bit_tasks/modules/mod_menu.tpl,v 1.2 2009/03/06 08:07:02 lsces Exp $ *}
 {strip}
 {if $gBitSystem->isPackageActive( 'tasks' )}
 	{bitmodule title="$moduleTitle" name="task_menu_items"}
@@ -12,7 +12,7 @@
 			{/if}
 
 			{if $gBitUser->hasPermission( 'p_tasks_supervise' )}
-				<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}logon_list.php">{biticon iname="preferences-system" iexplain="Upload Files" ilocation=menu}</a></li>
+				<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}logon_list.php">{biticon iname="preferences-system" iexplain="Logon Management" ilocation=menu}</a></li>
 			{/if}
 
 			{if $gBitUser->hasPermission( 'p_tasks_admin' )}
