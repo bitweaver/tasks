@@ -1,6 +1,6 @@
 <?php
 /**
- * @version      $Header: /cvsroot/bitweaver/_bit_tasks/view.php,v 1.2 2009/01/12 20:07:25 lsces Exp $
+ * @version      $Header: /cvsroot/bitweaver/_bit_tasks/view.php,v 1.3 2009/03/06 08:04:27 lsces Exp $
  *
  * @author       lsces  <lester@lsces.co.uk>
  * @package      tasks
@@ -19,8 +19,8 @@ require_once( TASKS_PKG_PATH.'Tasks.php');
 $gTask = new Tasks();
 
 $currentInfo = array();
-$currentInfo[title] = 'View Outstanding Enquiries';
-$currentInfo[queues] = $gTask->getQueueList();
+$currentInfo['title'] = 'View Outstanding Enquiries';
+$currentInfo['queues'] = $gTask->getQueueList();
 
 $gBitSmarty->assign_by_ref( 'currentInfo', $currentInfo );
 

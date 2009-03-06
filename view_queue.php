@@ -1,6 +1,6 @@
 <?php
 /**
- * @version      $Header: /cvsroot/bitweaver/_bit_tasks/view_queue.php,v 1.1 2009/01/13 08:39:08 lsces Exp $
+ * @version      $Header: /cvsroot/bitweaver/_bit_tasks/view_queue.php,v 1.2 2009/03/06 08:04:27 lsces Exp $
  *
  * @author       lsces  <lester@lsces.co.uk>
  * @package      tasks
@@ -23,8 +23,8 @@ if( !empty( $_REQUEST['queue_id'] ) ) {
 }
 
 $currentInfo = array();
-$currentInfo[title] = 'View Enquiries for '.$gTask->getQueueTitle($queue);
-$currentInfo[tickets] = $gTask->getList( $_REQUEST );
+$currentInfo['title'] = 'View Enquiries for '.$gTask->getQueueTitle($queue);
+$currentInfo['tickets'] = $gTask->getList( $_REQUEST );
 
 $gBitSmarty->assign_by_ref( 'currentInfo', $currentInfo );
 
