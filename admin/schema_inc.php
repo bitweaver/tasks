@@ -3,6 +3,7 @@ $tables = array(
 
 'task_ticket' => "
   ticket_id I8 PRIMARY,
+  content_id I8,
   ticket_ref T NOT NULL,
   office I4 NOTNULL,
   ticket_no I4 NOT NULL,
@@ -14,6 +15,7 @@ $tables = array(
   staff_id I4 NOTNULL,
   init_id I4 NOTNULL,
   caller_id I8,
+  usn I8,
   appoint_id I8 DEFAULT 0,
   applet V(1) DEFAULT '' NOTNULL,
   note C(40),
@@ -37,11 +39,11 @@ $tables = array(
 ",
 
 'task_reason' => "
-  reason I2 PRIMARY,
+  reason I4 PRIMARY,
   title C(40),
   reason_type I2,
   reason_source I2,
-  tag V(3),
+  tag V(4),
   qty I4
 ",
 
