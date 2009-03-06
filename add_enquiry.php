@@ -1,6 +1,6 @@
 <?php
 /**
- * @version      $Header: /cvsroot/bitweaver/_bit_tasks/add_enquiry.php,v 1.3 2009/01/13 20:16:45 lsces Exp $
+ * @version      $Header: /cvsroot/bitweaver/_bit_tasks/add_enquiry.php,v 1.4 2009/03/06 08:03:25 lsces Exp $
  *
  * @author       lsces  <lester@lsces.co.uk>
  * @package      tasks
@@ -31,6 +31,6 @@ $gTask->store( $newtask );
 $gBitUser->storePreference('task_process', $gTask->mContentId );
 
 // Refresh display
-//header ("location: ".TASKS_PKG_URL."index.php");
-//die;
+header ("location: ".TASKS_PKG_URL."index.php");
+die;
 ?>
