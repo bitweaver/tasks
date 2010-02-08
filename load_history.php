@@ -7,7 +7,7 @@
  */
 
 // Initialization
-require_once( '../bit_setup_inc.php' );
+require_once( '../kernel/setup_inc.php' );
 require_once( TASKS_PKG_PATH.'Tasks.php' );
 
 // Is package installed and enabled

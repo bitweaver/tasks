@@ -1,6 +1,6 @@
 <?php
 /**
- * @version      $Header: /cvsroot/bitweaver/_bit_tasks/add_enquiry.php,v 1.4 2009/03/06 08:03:25 lsces Exp $
+ * @version      $Header: /cvsroot/bitweaver/_bit_tasks/add_enquiry.php,v 1.5 2010/02/08 21:27:26 wjames5 Exp $
  *
  * @author       lsces  <lester@lsces.co.uk>
  * @package      tasks
@@ -11,7 +11,7 @@
 /**
  * Setup
  */ 
-require_once( '../bit_setup_inc.php' );
+require_once( '../kernel/setup_inc.php' );
 
 $gBitSystem->verifyPackage( 'tasks' );
 
