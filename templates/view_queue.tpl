@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tasks/templates/view_queue.tpl,v 1.1 2009/01/13 08:39:08 lsces Exp $ *}
+{* $Header$ *}
 {strip}
 <div class="display tasks">
 	<div class="header">

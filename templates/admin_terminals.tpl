@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tasks/templates/admin_terminals.tpl,v 1.1 2008/12/24 09:04:37 lsces Exp $ *}
+{* $Header$ *}
 {strip}
 <div class="display tasks">
 	<div class="header">

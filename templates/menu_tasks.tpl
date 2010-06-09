@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tasks/templates/menu_tasks.tpl,v 1.6 2009/01/16 20:32:38 lsces Exp $ *}
+{* $Header$ *}
 {strip}
 <ul>
 	{if $userstate > 0 }

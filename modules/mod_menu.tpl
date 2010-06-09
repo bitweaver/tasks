@@ -1,4 +1,4 @@
-{* $Header: /cvsroot/bitweaver/_bit_tasks/modules/mod_menu.tpl,v 1.2 2009/03/06 08:07:02 lsces Exp $ *}
+{* $Header$ *}
 {strip}
 {if $gBitSystem->isPackageActive( 'tasks' )}
 	{bitmodule title="$moduleTitle" name="task_menu_items"}

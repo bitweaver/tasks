@@ -1,6 +1,6 @@
 <?php
 /**
- * $Header: /cvsroot/bitweaver/_bit_tasks/liberty_plugins/data.dbreport.php,v 1.3 2010/03/22 22:15:55 lsces Exp $
+ * $Header$
  * @package  liberty
  * @subpackage plugins_data
  *

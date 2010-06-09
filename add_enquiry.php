@@ -1,6 +1,6 @@
 <?php
 /**
- * @version      $Header: /cvsroot/bitweaver/_bit_tasks/add_enquiry.php,v 1.5 2010/02/08 21:27:26 wjames5 Exp $
+ * @version      $Header$
  *
  * @author       lsces  <lester@lsces.co.uk>
  * @package      tasks

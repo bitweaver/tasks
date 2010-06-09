@@ -1,6 +1,6 @@
 <?php
 /**
- * @version      $Header: /cvsroot/bitweaver/_bit_tasks/view_tickets.php,v 1.3 2010/02/08 21:27:26 wjames5 Exp $
+ * @version      $Header$
  *
  * @author       lsces  <lester@lsces.co.uk>
  * @package      tasks

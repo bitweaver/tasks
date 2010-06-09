@@ -1,6 +1,6 @@
 <?php
 
-// $Header: /cvsroot/bitweaver/_bit_tasks/admin/admin_tasks_inc.php,v 1.3 2009/10/01 14:17:05 wjames5 Exp $
+// $Header$
 
 // All Rights Reserved. See below for details and a complete list of authors.
 // Licensed under the GNU LESSER GENERAL PUBLIC LICENSE. See http://www.gnu.org/copyleft/lesser.html for details.
