@@ -17,7 +17,7 @@ $tables = array(
   caller_id I8,
   usn I8,
   appoint_id I8 DEFAULT 0,
-  applet V(1) DEFAULT '' NOTNULL,
+  applet C(1) NOTNULL,
   note C(40),
   memo X
 ",
@@ -35,7 +35,7 @@ $tables = array(
   proom I2,
   tags I4 DEFAULT 0,
   clearance I2 DEFAULT 0,
-  applet V(1) DEFAULT '' NOTNULL
+  applet C(1) NOTNULL
 ",
 
 'task_reason' => "
@@ -43,7 +43,7 @@ $tables = array(
   title C(40),
   reason_type I2,
   reason_source I2,
-  tag V(4),
+  tag C(4),
   qty I4
 ",
 
@@ -126,14 +126,14 @@ $tables = array(
 'task_caller' => "
   caller_id I8 PRIMARY,
   cltype I2,
-  title V(35) DEFAULT '',
-  surname C(32) DEFAULT '',
-  forename C(32) DEFAULT '',
+  title C(35),
+  surname C(32),
+  forename C(32),
   company C(40),
   ni C(9),
   hbis C(10),
-  address C(255) DEFAULT '',
-  postcode C(10) DEFAULT '',
+  address C(255),
+  postcode C(10),
   lastvisit T,
   specialneeds C(4),
   staff_id I4 DEFAULT 0,
@@ -145,12 +145,12 @@ $tables = array(
 
 'task_staff' => "
   staff_id I8 PRIMARY,
-  surname C(32) DEFAULT '',
-  forename C(32) DEFAULT '',
-  initials C(4) DEFAULT '',
-  direct C(16) DEFAULT '',
+  surname C(32),
+  forename C(32),
+  initials C(4),
+  direct C(16),
   team I4 DEFAULT 0,
-  ext C(8) DEFAULT '',
+  ext C(8),
   category I2 DEFAULT 0,
   logon C(4),
   note C(40),
