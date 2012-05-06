@@ -31,7 +31,7 @@ class Tasks extends LibertyContent {
 	 * @param integer Base content_id identifier 
 	 */
 	function Tasks( $pTicketId = NULL, $pContentId = NULL ) {
-		LibertyContent::LibertyContent();
+		parent::__construct();
 		$this->registerContentType( TASKS_CONTENT_TYPE_GUID, array(
 				'content_type_guid' => TASKS_CONTENT_TYPE_GUID,
 				'content_name' => 'Task Ticket',
