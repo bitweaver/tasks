@@ -38,7 +38,7 @@
 							</td>
 							<td>
 								<span class="actionicon">
-									{smartlink ititle="View" ifile="get_queue.php" ibiticon="icons/go-up" queue_id=$currentInfo.queues[queue].queue_id}
+									{smartlink ititle="View" ifile="get_queue.php" booticon="icon-cloud-upload" queue_id=$currentInfo.queues[queue].queue_id}
 								</span>
 							</td>
 						</tr>

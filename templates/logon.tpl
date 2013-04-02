@@ -32,7 +32,7 @@
 							</td>
 							<td>
 								<span class="actionicon">
-									{smartlink ititle="View" ifile="view_ticket.php" ibiticon="icons/accessories-text-editor" ticket_id=$currentInfo.tickets[ticket].ticket_id}
+									{smartlink ititle="View" ifile="view_ticket.php" booticon="icon-edit" ticket_id=$currentInfo.tickets[ticket].ticket_id}
 								</span>
 								<label for="ev_{$currentInfo.logged_staff[staff].ticket_no}">	
 									{$currentInfo.logged_staff[staff].staff_id}
