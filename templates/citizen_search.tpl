@@ -4,7 +4,7 @@
 				<input type="hidden" name="{$name}" value="{$value}" />
 			{/foreach}
 			<input type="hidden" name="sort_mode" value="{$sort_mode|default:surname_desc}" />
-			{biticon ipackage="icons" iname="edit-find" iexplain="Search"} &nbsp;
+			{booticon iname="icon-search"  ipackage="icons"  iexplain="Search"} &nbsp;
 			<label>{tr}Name{/tr}:&nbsp;<input size="20" type="text" name="find_name" value="{$find_name|default:$smarty.request.find_name|escape}" /></label> &nbsp;
 			<label>{tr}Organisation{/tr}:&nbsp;<input size="20" type="text" name="find_org" value="{$find_org|default:$smarty.request.find_org|escape}" /></label><br />
 			<label>{tr}Street{/tr}:&nbsp;<input size="20" type="text" name="find_street" value="{$find_street|default:$smarty.request.find_street|escape}" /></label> &nbsp;

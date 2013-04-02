@@ -2,10 +2,10 @@
 {strip}
 <ul>
 	{if $userstate > 0 }
-			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}index.php?refer=1">{biticon iname="go-down" iexplain="Refer to waiting list" ilocation=menu}</a></li>
-			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}index.php?finish=1">{biticon iname="go-right" iexplain="Finish" ilocation=menu}</a></li>
-			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}find_citizen.php">{biticon iname="go-right" iexplain="Find existing citizen" ilocation=menu}</a></li>
-			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_citizen.php">{biticon iname="go-right" iexplain="Create new citizen" ilocation=menu}</a></li>
+			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}index.php?refer=1">{booticon iname="icon-cloud-download"   iexplain="Refer to waiting list" ilocation=menu}</a></li>
+			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}index.php?finish=1">{booticon iname="icon-arrow-right"   iexplain="Finish" ilocation=menu}</a></li>
+			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}find_citizen.php">{booticon iname="icon-arrow-right"   iexplain="Find existing citizen" ilocation=menu}</a></li>
+			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_citizen.php">{booticon iname="icon-arrow-right"   iexplain="Create new citizen" ilocation=menu}</a></li>
 	{/if}
 	{if !$userstate or $userstate eq 0  }
 		{if $gBitUser->hasPermission( 'p_tasks_view' )}
@@ -14,7 +14,7 @@
 		{/if}
 	
 		{if $gBitUser->hasPermission( 'p_tasks_create' )}
-			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_enquiry.php?type=1">{biticon iname="document-print" iexplain="Create Ticket" ilocation=menu}</a></li>
+			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_enquiry.php?type=1">{booticon iname="icon-print"   iexplain="Create Ticket" ilocation=menu}</a></li>
 			<li><a class="item" title="" href="add_enquiry.php?type=2">{booticon iname="icon-file" iexplain="Create Enquiry" ilocation=menu}</a>
 				<ul>
 					<li><a class="item" title="" href="add_enquiry.php?type=2">{biticon iname="phone" iexplain="Telephone" ilocation=menu}</a></li>
@@ -34,8 +34,8 @@
 		{/if}
 	{/if}
 	{if $userstate < 0 }
-			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}find_citizen.php">{biticon iname="go-right" iexplain="Find existing citizen" ilocation=menu}</a></li>
-			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_citizen.php">{biticon iname="go-right" iexplain="Create new citizen" ilocation=menu}</a></li>
+			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}find_citizen.php">{booticon iname="icon-arrow-right"   iexplain="Find existing citizen" ilocation=menu}</a></li>
+			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_citizen.php">{booticon iname="icon-arrow-right"   iexplain="Create new citizen" ilocation=menu}</a></li>
 	{/if}
 </ul>
 {/strip}
