@@ -8,7 +8,7 @@
 			{/if}
 
 			{if $gBitUser->hasPermission( 'p_tasks_create' )}
-				<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_enquiry.php">{biticon iname="document-new" iexplain="Create Enquiry" ilocation=menu}</a></li>
+				<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_enquiry.php">{booticon iname="icon-file" iexplain="Create Enquiry" ilocation=menu}</a></li>
 			{/if}
 
 			{if $gBitUser->hasPermission( 'p_tasks_supervise' )}

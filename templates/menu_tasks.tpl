@@ -9,13 +9,13 @@
 	{/if}
 	{if !$userstate or $userstate eq 0  }
 		{if $gBitUser->hasPermission( 'p_tasks_view' )}
-			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}view.php">{biticon iname="document-new" iexplain="View Queues" ilocation=menu}</a></li>
-			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}view_tickets.php">{biticon iname="document-new" iexplain="View Tasks" ilocation=menu}</a></li>
+			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}view.php">{booticon iname="icon-file" iexplain="View Queues" ilocation=menu}</a></li>
+			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}view_tickets.php">{booticon iname="icon-file" iexplain="View Tasks" ilocation=menu}</a></li>
 		{/if}
 	
 		{if $gBitUser->hasPermission( 'p_tasks_create' )}
 			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_enquiry.php?type=1">{biticon iname="document-print" iexplain="Create Ticket" ilocation=menu}</a></li>
-			<li><a class="item" title="" href="add_enquiry.php?type=2">{biticon iname="document-new" iexplain="Create Enquiry" ilocation=menu}</a>
+			<li><a class="item" title="" href="add_enquiry.php?type=2">{booticon iname="icon-file" iexplain="Create Enquiry" ilocation=menu}</a>
 				<ul>
 					<li><a class="item" title="" href="add_enquiry.php?type=2">{biticon iname="phone" iexplain="Telephone" ilocation=menu}</a></li>
 					<li><a class="item" title="" href="add_enquiry.php?type=3">{biticon iname="internet-mail" iexplain="eMessage" ilocation=menu}</a></li>
