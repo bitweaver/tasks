@@ -8,7 +8,7 @@
 	<div class="body">
 		{formfeedback hash=$feedback}
 
-		<div class="row">
+		<div class="control-group">
 			<table>
 				<thead>
 					<tr>

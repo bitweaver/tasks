@@ -9,7 +9,7 @@
 		{formfeedback hash=$feedback}
 
 		{if $currentInfo.tickets}
-		<div class="row">
+		<div class="control-group">
 			{formlabel label="Tickets" for="ticket"}
 			{forminput}
 			<table>
