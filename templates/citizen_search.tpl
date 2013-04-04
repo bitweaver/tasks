@@ -9,7 +9,7 @@
 			<label>{tr}Organisation{/tr}:&nbsp;<input size="20" type="text" name="find_org" value="{$find_org|default:$smarty.request.find_org|escape}" /></label><br />
 			<label>{tr}Street{/tr}:&nbsp;<input size="20" type="text" name="find_street" value="{$find_street|default:$smarty.request.find_street|escape}" /></label> &nbsp;
 			<label>{tr}Postcode{/tr}:&nbsp;<input size="10" type="text" name="find_postcode" value="{$find_postcode|default:$smarty.request.find_postcode|escape}" /></label> &nbsp;
-			<input type="submit" name="search" value="{tr}Find{/tr}" />&nbsp;
+			<input type="submit" class="btn" name="search" value="{tr}Find{/tr}" />&nbsp;
 			<input type="button" onclick="location.href='{$smarty.server.SCRIPT_NAME}{if $hidden}?{/if}{foreach from=$hidden item=value key=name}{$name}={$value}&amp;{/foreach}'" value="{tr}Reset{/tr}" />
 		{/form}
 	</div>
