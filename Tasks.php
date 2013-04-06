@@ -390,6 +390,7 @@ class Tasks extends LibertyContent {
 	 * @return array Queue activity records
 	 */
 	function getQueueList( &$pListHash = NULL ) {
+		$ret = array();
 		$query = "SELECT rs.`office`, rs.`terminal`, rs.`title`, rs.`ter_type`, rs.`x1` AS no_warn, rs.`x2` AS no_alarm, rs.`x3` AS aw_warn, rs.`x4` AS aw_alarm,
 			COUNT(tic.`ticket_ref`) AS `no_waiting`,
 			AVG(((CURRENT_TIMESTAMP - tic.`last`) * 86400)) AS `avg_wait`
