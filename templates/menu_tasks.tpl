@@ -1,5 +1,6 @@
 {strip}
-<a class="dropdown-toggle" data-toggle="dropdown" href="#"> {tr}{$packageMenuTitle}{/tr} <b class="caret"></b></a>
+{if $gBitUser->hasPermission( 'p_tasks_view' )}
+{if $packageMenuTitle}<a class="dropdown-toggle" data-toggle="dropdown" href="#"> {tr}{$packageMenuTitle}{/tr} <b class="caret"></b></a>{/if}
 <ul class="dropdown-menu">
 	{if $userstate > 0 }
 			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}index.php?refer=1">{booticon iname="icon-cloud-download"   iexplain="Refer to waiting list" ilocation=menu}</a></li>
@@ -8,10 +9,8 @@
 			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_citizen.php">{booticon iname="icon-arrow-right"   iexplain="Create new citizen" ilocation=menu}</a></li>
 	{/if}
 	{if !$userstate or $userstate eq 0  }
-		{if $gBitUser->hasPermission( 'p_tasks_view' )}
-			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}view.php">{booticon iname="icon-file" iexplain="View Queues" ilocation=menu}</a></li>
-			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}view_tickets.php">{booticon iname="icon-file" iexplain="View Tasks" ilocation=menu}</a></li>
-		{/if}
+		<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}view.php">{booticon iname="icon-file" iexplain="View Queues" ilocation=menu}</a></li>
+		<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}view_tickets.php">{booticon iname="icon-file" iexplain="View Tasks" ilocation=menu}</a></li>
 	
 		{if $gBitUser->hasPermission( 'p_tasks_create' )}
 			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_enquiry.php?type=1">{booticon iname="icon-print"   iexplain="Create Ticket" ilocation=menu}</a></li>
@@ -38,4 +37,5 @@
 			<li><a class="item" href="{$smarty.const.TASKS_PKG_URL}add_citizen.php">{booticon iname="icon-arrow-right"   iexplain="Create new citizen" ilocation=menu}</a></li>
 	{/if}
 </ul>
+{/if}
 {/strip}
