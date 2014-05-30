@@ -8,7 +8,7 @@
 	<div class="body">
 		{formfeedback hash=$feedback}
 
-		<div class="control-group">
+		<div class="form-group">
 			<table>
 				<caption>{tr}List of Current Days enquiries{/tr}</caption>
 				<thead>
