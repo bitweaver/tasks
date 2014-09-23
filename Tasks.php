@@ -240,7 +240,7 @@ class Tasks extends LibertyContent {
 	 * @param array mInfo style array of content information
 	 * @return string Text for the title description
 	 */
-	function getTitleFromHash( $pHash ) {
+	public static function getTitleFromHash( $pHash ) {
 		$ret = NULL;
 
 		if( !empty( $pHash['title'] ) ) {
