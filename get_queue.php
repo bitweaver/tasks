@@ -23,12 +23,12 @@ if( !empty( $_REQUEST['queue_id'] ) ) {
 }
 
 if ( $gTask->isValid() ) {
-	$gBitSmarty->assign_by_ref( 'taskInfo', $gTask->mInfo );
+	$gBitSmarty->assignByRef( 'taskInfo', $gTask->mInfo );
 
 	require_once( CITIZEN_PKG_PATH.'Citizen.php');
 	$gCitizen = new Citizen( $this->mCitizenId );
 	if ( $gCitizen->isValid() ) {
-		$gBitSmarty->assign_by_ref( 'citizenInfo', $gCitizen->mInfo );
+		$gBitSmarty->assignByRef( 'citizenInfo', $gCitizen->mInfo );
 	}
 	
 	$gBitSystem->setBrowserTitle("Task List Item");

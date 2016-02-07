@@ -22,7 +22,7 @@ $currentInfo = array();
 $currentInfo['title'] = 'View Outstanding Enquiries';
 $currentInfo['queues'] = $gTask->getQueueList();
 
-$gBitSmarty->assign_by_ref( 'currentInfo', $currentInfo );
+$gBitSmarty->assignByRef( 'currentInfo', $currentInfo );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:tasks/view.tpl', tra( 'View Outstanding Enquiries' ) , array( 'display_mode' => 'list' ));

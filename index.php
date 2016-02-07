@@ -54,19 +54,19 @@ if ( $userstate ) {
 }
 
 if ( $gTask->isValid() and $userstate <> 0 ) {
-	$gBitSmarty->assign_by_ref( 'userstate', $userstate );
-	$gBitSmarty->assign_by_ref( 'taskInfo', $gTask->mInfo );
+	$gBitSmarty->assignByRef( 'userstate', $userstate );
+	$gBitSmarty->assignByRef( 'taskInfo', $gTask->mInfo );
 	$dept_tree = $gTask->listQueues();
-	$gBitSmarty->assign_by_ref( 'departments', $dept_tree['depts'] );
-	$gBitSmarty->assign_by_ref( 'tags', $dept_tree['tags'] );
-	$gBitSmarty->assign_by_ref( 'subtags', $dept_tree['subtags'] );
+	$gBitSmarty->assignByRef( 'departments', $dept_tree['depts'] );
+	$gBitSmarty->assignByRef( 'tags', $dept_tree['tags'] );
+	$gBitSmarty->assignByRef( 'subtags', $dept_tree['subtags'] );
 
 	require_once( CITIZEN_PKG_PATH.'Citizen.php');
 	$gCitizen = new Citizen( null, $gTask->mCitizenId );
 	$gCitizen->load();
 	if ( $gCitizen->isValid() ) {
 		$gCitizen->loadXrefList();
-		$gBitSmarty->assign_by_ref( 'citizenInfo', $gCitizen->mInfo );
+		$gBitSmarty->assignByRef( 'citizenInfo', $gCitizen->mInfo );
 	}
 	
 	$gBitSystem->setBrowserTitle("Task List Item");

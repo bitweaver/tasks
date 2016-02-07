@@ -26,7 +26,7 @@ $currentInfo = array();
 $currentInfo['title'] = 'View Enquiries for '.$gTask->getQueueTitle($queue);
 $currentInfo['tickets'] = $gTask->getList( $_REQUEST );
 
-$gBitSmarty->assign_by_ref( 'currentInfo', $currentInfo );
+$gBitSmarty->assignByRef( 'currentInfo', $currentInfo );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:tasks/view_queue.tpl', tra( 'View Outstanding Enquiries' ) , array( 'display_mode' => 'list' ));

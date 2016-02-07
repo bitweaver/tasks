@@ -20,7 +20,7 @@ require_once( TASKS_PKG_PATH.'Tasks.php');
 $currentInfo = array();
 $currentInfo['title'] = 'View Current Logon Status';
 
-$gBitSmarty->assign_by_ref( 'currentInfo', $currentInfo );
+$gBitSmarty->assignByRef( 'currentInfo', $currentInfo );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:tasks/logon.tpl', tra( 'View Current Logon Status' ) , array( 'display_mode' => 'list' ));

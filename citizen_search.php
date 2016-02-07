@@ -30,7 +30,7 @@ if ( $userstate ) {
 	 	$gTask->store( $updatetask ); 	
 	}
 }
-$gBitSmarty->assign_by_ref( 'userstate', $userstate );
+$gBitSmarty->assignByRef( 'userstate', $userstate );
 	
 $gContent = new Citizen( );
 
@@ -43,13 +43,13 @@ if( !empty( $_REQUEST["find_org"] ) ) {
 }
 
 //$citizen_type = $gContent->getCitizensTypeList();
-//$gBitSmarty->assign_by_ref('citizen_type', $citizen_type);
+//$gBitSmarty->assignByRef('citizen_type', $citizen_type);
 $listHash = $_REQUEST;
 // Get a list of matching citizen entries
 $listcitizens = $gContent->getCitizenList( $listHash );
 
-$gBitSmarty->assign_by_ref( 'listcitizens', $listcitizens );
-$gBitSmarty->assign_by_ref( 'listInfo', $listHash['listInfo'] );
+$gBitSmarty->assignByRef( 'listcitizens', $listcitizens );
+$gBitSmarty->assignByRef( 'listInfo', $listHash['listInfo'] );
 
 $gBitSystem->setBrowserTitle("View Citizens List");
 // Display the template

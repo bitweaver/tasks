@@ -22,7 +22,7 @@ $currentInfo = array();
 $currentInfo['title'] = 'View Enquiries for ';
 $currentInfo['tickets'] = $gTask->getList( $_REQUEST );
 
-$gBitSmarty->assign_by_ref( 'currentInfo', $currentInfo );
+$gBitSmarty->assignByRef( 'currentInfo', $currentInfo );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:tasks/view_tickets.tpl', tra( 'View Enquiries' ) , array( 'display_mode' => 'list' ));

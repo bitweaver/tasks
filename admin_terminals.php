@@ -20,7 +20,7 @@ require_once( TASKS_PKG_PATH.'Tasks.php');
 $currentInfo = array();
 $currentInfo['title'] = 'Admin Terminal Location Table';
 
-$gBitSmarty->assign_by_ref( 'currentInfo', $currentInfo );
+$gBitSmarty->assignByRef( 'currentInfo', $currentInfo );
 
 // Display the template
 $gBitSystem->display( 'bitpackage:tasks/admin_terminals.tpl', tra( 'Admin Terminal Location Table' ) , array( 'display_mode' => 'list' ));
