@@ -9,7 +9,7 @@
 		{formfeedback hash=$feedback}
 
 		{if $currentInfo.queues}
-		<div class="control-group">
+		<div class="form-group">
 			<table>
 				<caption>{tr}List of Current Days outstanding enquiries{/tr}</caption>
 				<thead>
